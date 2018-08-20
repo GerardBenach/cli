@@ -11,6 +11,7 @@ export interface IArguments {
   options: {
     port?: number
     browser?: boolean
+    watch?: boolean
   }
 }
 

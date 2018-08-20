@@ -118,7 +118,7 @@ export class Decentraland extends EventEmitter {
   async preview() {
     await this.project.validateExistingProject()
     await this.project.validateParcelOptions()
-    const preview = new Preview(await this.project.getDCLIgnore(), this.project.getWatch())
+    const preview = new Preview(await this.project.getDCLIgnore(), this.getWatch())
 
     events(preview, '*', this.pipeEvents.bind(this))
 

@@ -30,13 +30,15 @@ export class Preview extends EventEmitter {
   private server = createServer(this.app)
   private wss = new WebSocket.Server({ server: this.server })
   private ignoredPaths: string
+  private watch: boolean
 
-  constructor(ignoredPaths: string) {
+  constructor(ignoredPaths: string, watch: boolean) {
     super()
     this.ignoredPaths = ignoredPaths
+    this.watch = watch
   }
 
-  async startServer(port: number, watch: boolean) {
+  async startServer(port: number) {
     const root = getRootPath()
     const ig = (ignore as any)().add(this.ignoredPaths)
 
@@ -50,7 +52,7 @@ export class Preview extends EventEmitter {
       }
     }
 
-    if (watch) {
+    if (this.watch) {
       chokidar.watch(root).on('all', (event, path) => {
         if (!ig.ignores(path)) {
           this.wss.clients.forEach(client => {

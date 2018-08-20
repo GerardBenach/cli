@@ -4,6 +4,7 @@
   "description": "CLI tool for parcel management.",
   "main": "./dist/index.js",
   "scripts": {
+    "postinstall": "npm run build",
     "start": "npm run watch",
     "watch": "decentraland-compiler build.json --watch",
     "build": "decentraland-compiler build.json && npm run linker:build && npm run copy:samples && npm run copy:certs",
