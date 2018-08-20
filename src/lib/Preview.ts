@@ -36,7 +36,7 @@ export class Preview extends EventEmitter {
     this.ignoredPaths = ignoredPaths
   }
 
-  async startServer(port: number) {
+  async startServer(port: number, watch: boolean) {
     const root = getRootPath()
     const ig = (ignore as any)().add(this.ignoredPaths)
 
@@ -50,15 +50,17 @@ export class Preview extends EventEmitter {
       }
     }
 
-    chokidar.watch(root).on('all', (event, path) => {
-      if (!ig.ignores(path)) {
-        this.wss.clients.forEach(client => {
-          if (client.readyState === WebSocket.OPEN) {
-            client.send('update')
-          }
-        })
-      }
-    })
+    if (watch) {
+      chokidar.watch(root).on('all', (event, path) => {
+        if (!ig.ignores(path)) {
+          this.wss.clients.forEach(client => {
+            if (client.readyState === WebSocket.OPEN) {
+              client.send('update')
+            }
+          })
+        }
+      })
+    }
 
     this.app.use(cors())
 
